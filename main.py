@@ -1,6 +1,7 @@
 import os 
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 import argparse
 
 
@@ -13,9 +14,12 @@ def main():
     parser = argparse.ArgumentParser(description="Chatbot")
     parser.add_argument("user_prompt", type=str, help="User prompt")
     args = parser.parse_args()
+    messages: list[types.Content] = [
+    types.Content(role="user", parts=[types.Part(text=args.user_prompt)])
+    ]
     response = client.models.generate_content(
         model="gemini-2.5-flash",
-        contents=args.user_prompt,
+        contents=messages,
     )
     if response.usage_metadata is None:
         raise RuntimeError("Usage metadata not found - likely a failed API request.")
