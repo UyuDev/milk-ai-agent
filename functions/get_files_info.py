@@ -17,9 +17,16 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
             return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
     
         # checks if directory is an actual directory or not
-        elif os.path.isdir(directory) is False:
+        elif os.path.isdir(target_dir) is False:
             return f'Error: "{directory}" is not a directory'
     
-        return f'Success: "{directory}" is within the working directory'
+
+        # iterate over the items in the target directory (name, file size, directory t/f)
+        tar_dir_contents: list = []
+        for item in os.listdir(target_dir):
+            item_path = os.path.join(target_dir, item)
+            tar_dir_contents.append(f"- {item}: file_size={os.path.getsize(item_path)} bytes, is_dir={os.path.isdir(item_path)}")
+        return "\n".join(tar_dir_contents)
+
     except Exception as e:
         return f"Error: {e}"
