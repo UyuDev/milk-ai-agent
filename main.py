@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from prompts import system_prompt
-from call_function import available_functions
+from call_function import available_functions, call_function
 import argparse
 
 
@@ -28,8 +28,20 @@ def main():
     if response.usage_metadata is None:
         raise RuntimeError("Usage metadata not found - likely a failed API request.")
     if response.function_calls is not None:
+        function_results = []
         for item in response.function_calls:
-            print(f"Calling function: {item.name}({item.args})")
+            # function_call_result is a types.functioncall object
+            function_call_result = call_function(item)
+            if not function_call_result.parts:
+                raise Exception("No parts in function call result")
+            elif function_call_result.parts[0].function_response is None:
+                raise Exception("No function response stored")
+            elif function_call_result.parts[0].function_response.response is None:
+                raise Exception("No function response")
+            function_results.append(function_call_result.parts[0])
+            if args.verbose:
+                print(f"-> {function_call_result.parts[0].function_response.response}")
+
     else:
         if args.verbose:
             print(

@@ -32,9 +32,6 @@ def get_file_content(working_directory: str, file_path: str) -> str:
         return f"Error: {e}"
     
 
-# placeholder - fix before running!
-# update at minimum - name and description
-# consider required arguments 
 schema_get_file_content = types.FunctionDeclaration(
     name="get_file_content",
     description="Reads file content in a specified file relative to the working directory, returning a string",

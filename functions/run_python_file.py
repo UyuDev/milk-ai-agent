@@ -54,9 +54,6 @@ def run_python_file(
     
 
 
-# placeholder - fix before running!
-# update at minimum - name and description
-# consider required arguments 
 schema_run_python_file = types.FunctionDeclaration(
     name="run_python_file",
     description="Executes a specified Python file relative to the working directory, returning a message string",
